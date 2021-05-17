@@ -13,7 +13,7 @@ const router=new VueRouter({
     routes:[
         {
             path:'/',
-            redirect:'/home/addBook'
+            redirect:'/home/borrowBook'
         },
         {
             path:'/login',
@@ -28,7 +28,7 @@ const router=new VueRouter({
                 {
                     path:'addBook',
                     name:'addBook',
-                    component:addBook
+                    component:addBook,
                 },
                 {
                     path:'borrowBook',
