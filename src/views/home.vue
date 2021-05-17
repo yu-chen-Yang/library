@@ -14,10 +14,11 @@
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab to="/home/borrowBook" label="借书一览" />
+        <q-route-tab :to="{ name:'borrowBook', query:{  usrId:id, isLogin:readerLogin } }" label="借书一览" />
         <q-route-tab to="/home/Booking" label="预约状态" />
-        <q-route-tab to="/home/manageBook" label="书目管理" />
         <q-route-tab to="/home/searchBook" label="查询书目" />
+        <q-route-tab to="/home/readerManage" label="读者信息管理" />
+        <q-route-tab to="/home/bookManage" label="书目管理" />
       </q-tabs>
     </q-header>
 
@@ -43,9 +44,12 @@ export default {
   components: {ReaderLogin, ReaderCard},
   data(){
     return{
-      readerLogin:true,
+      readerLogin:false,
+      test:"测试",
+      id:""
     }
-  }
+  },
+
 }
 </script>
 
