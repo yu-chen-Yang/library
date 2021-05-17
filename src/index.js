@@ -4,8 +4,9 @@ import login from "@/views/login";
 import home from "@/views/home";
 import addBook from "@/components/addBook";
 import borrowBook from "@/components/borrowBook";
-import returnBook from "@/components/returnBook"
+import Booking from "@/components/Booking"
 import readerManage from "@/components/readerManage";
+import searchBook from "./components/searchBook";
 
 Vue.use(VueRouter)
 
@@ -36,14 +37,19 @@ const router=new VueRouter({
                     component:borrowBook,
                 },
                 {
-                    path:'returnBook',
-                    name:'returnBook',
-                    component:returnBook,
+                    path:'Booking',
+                    name:'Booking',
+                    component:Booking,
                 },
                 {
-                    path:'readerManage',
-                    name:'readerManage',
+                    path:'bookManage',
+                    name:'bookManage',
                     component:readerManage,
+                },
+                {
+                    path:"searchBook",
+                    name:"searchBook",
+                    component:searchBook,
                 }
             ]
         }

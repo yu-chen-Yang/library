@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh LpR fFf">
+  <q-layout view="hHh lpR lFr">
 
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
@@ -14,9 +14,10 @@
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab to="/home/borrowBook" label="借书" />
-        <q-route-tab to="/home/returnBook" label="还书" />
-        <q-route-tab to="/home/addBook" label="增加书目" />
+        <q-route-tab to="/home/borrowBook" label="借书一览" />
+        <q-route-tab to="/home/Booking" label="预约状态" />
+        <q-route-tab to="/home/manageBook" label="书目管理" />
+        <q-route-tab to="/home/searchBook" label="查询书目" />
       </q-tabs>
     </q-header>
 
@@ -42,7 +43,7 @@ export default {
   components: {ReaderLogin, ReaderCard},
   data(){
     return{
-      readerLogin:false,
+      readerLogin:true,
     }
   }
 }
