@@ -51,15 +51,15 @@ export default {
     },
     login:function (){
       console.log("!!!");
-      this.axios.get('https://114.87.240.187:8080/readerlogin',{
+      this.$axios.post('https://27.115.83.145:8099/readerlogin',{
         params:{
           id:this.readerId
         }
-      }).then(function (response){
-        console.log(response);
+      }).then(res=>{
+        console.log(res);
         this.isLogin=true;
-      }).catch(function (error){
-        console.log(error);
+      }).catch(err=>{
+        console.log(err);
       })
     }
   }
