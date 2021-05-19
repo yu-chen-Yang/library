@@ -46,10 +46,9 @@ export default {
     return{
       readerLogin:false,
       test:"测试",
-      id:""
+      id:"123"
     }
   },
-
 }
 </script>
 

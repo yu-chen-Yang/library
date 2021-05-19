@@ -1,8 +1,8 @@
 <template>
   <div class="borrow">
   <div v-if="!isLogin">
-    <p>未登录，因此啥也没有呢！不如看点养眼照片呢  !  >__>  !</p>
-    <hot/>
+    <p style="font-family: Arial; font-size: 3rem">未登录，因此啥也没有呢！不如听一首德沃夏克的幽默曲放松一下吧 !  >__>  !</p>
+    <video v-bind:src="video" v-bind:controls="false" autoplay="autoplay" loop="loop" width="100%"/>
   </div>
     <div v-else>
       {{usrId}}
@@ -11,14 +11,14 @@
 </template>
 
 <script>
-import Hot from "./hot";
 export default {
   name: "borrow",
   components:{
-    Hot,
   },
   data(){
-    return {}
+    return {
+      video:require("@/assets/幽默曲.mp4")
+    }
   },
   computed:{
     usrId: function (){
@@ -46,16 +46,6 @@ export default {
   position: relative;
   margin-top: 1.5rem;
   margin-left: 1.5rem;
-}
-.li{
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: white;
-  position: relative;
-  cursor: pointer;
-  list-style: none;
-  white-space:nowrap;
-  line-height: 1.25;
-  letter-spacing: normal;
+  margin-right: 1.5rem;
 }
 </style>

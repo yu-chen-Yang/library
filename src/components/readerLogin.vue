@@ -1,8 +1,6 @@
 <template>
   <div class="q-pa-md" style="max-width: 400px">
     <q-form
-        @submit="onSubmit"
-        @reset="onReset"
         class="q-gutter-md"
     >
       <q-input
@@ -29,7 +27,7 @@
         </q-card>
       </q-dialog>
       <div>
-        <q-btn label="Submit" type="submit" color="primary"/>
+        <q-btn label="Submit" type="submit" color="primary" v-on:click="login"/>
         <q-btn label="Forget？" color="primary" flat class="q-ml-sm" @click="forget" />
       </div>
     </q-form>
@@ -44,11 +42,25 @@ export default {
     return{
       readerId:"",
       prompt:false,
+      isLogin:false
     }
   },
   methods:{
     forget:function (){
       this.prompt=true;
+    },
+    login:function (){
+      console.log("!!!");
+      this.axios.get('https://114.87.240.187:8080/readerlogin',{
+        params:{
+          id:this.readerId
+        }
+      }).then(function (response){
+        console.log(response);
+        this.isLogin=true;
+      }).catch(function (error){
+        console.log(error);
+      })
     }
   }
 }
