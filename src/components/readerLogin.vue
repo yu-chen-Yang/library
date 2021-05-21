@@ -28,10 +28,10 @@
       </q-dialog>
       <div>
         <q-btn label="Submit" type="submit" color="primary" v-on:click="login"/>
-        <q-btn label="Forget？" color="primary" flat class="q-ml-sm" @click="forget" />
+        <q-btn label="Forget？" color="primary" flat class="q-ml-sm" @click="forget"/>
       </div>
     </q-form>
-
+    <div>{{test}}</div>
   </div>
 </template>
 
@@ -40,24 +40,27 @@ export default {
   name: "readerLogin",
   data(){
     return{
-      readerId:"",
       prompt:false,
-      isLogin:false
+      test:"1",
+      readerId:""
     }
+  },
+  props:{
+    isLogin:Boolean,
   },
   methods:{
     forget:function (){
       this.prompt=true;
     },
     login:function (){
-      console.log("!!!");
-      this.$axios.post('https://27.115.83.145:8099/readerlogin',{
+      console.log(this.readerId);
+      this.$axios.post('http://192.168.137.1:8099/readerlogin',{
         params:{
           id:this.readerId
         }
       }).then(res=>{
         console.log(res);
-        this.isLogin=true;
+        this.test=res;
       }).catch(err=>{
         console.log(err);
       })

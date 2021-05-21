@@ -24,10 +24,10 @@
 
     <q-drawer show-if-above v-model="right" side="right" bordered>
       <div v-if="readerLogin">
-        <reader-card/>
+        <reader-card />
       </div>
       <div v-else>
-      <reader-login/>
+      <reader-login v-bind:is-login="readerLogin" v-bind::reader-id.sync="id"/>
       </div>
     </q-drawer>
     <q-page-container>
