@@ -31,41 +31,43 @@
         <q-btn label="Forget？" color="primary" flat class="q-ml-sm" @click="forget"/>
       </div>
     </q-form>
-    <div>{{test}}</div>
   </div>
 </template>
 
 <script>
+
+
+
 export default {
   name: "readerLogin",
   data(){
-    return{
-      prompt:false,
-      test:"1",
-      readerId:""
-    }
-  },
-  props:{
-    isLogin:Boolean,
+   return{
+     readers:{
+       name:"",
+       id:"",
+       email:"",
+       tele:"",
+       isLogin:false
+     },
+     readerId:""
+   }
   },
   methods:{
-    forget:function (){
-      this.prompt=true;
-    },
-    login:function (){
-      console.log(this.readerId);
-      this.$axios.post('http://192.168.137.1:8099/readerlogin',{
-        params:{
+      login:function (){
+        this.$axios.post('http://192.168.137.1:8099/readerlogin',{
           id:this.readerId
-        }
-      }).then(res=>{
-        console.log(res);
-        this.test=res;
-      }).catch(err=>{
-        console.log(err);
-      })
-    }
-  }
+        }).then(res=>{
+          this.readers.name=res.data.obj.name;
+          this.readers.id=this.readerId;
+          this.readers.tele=res.data.obj.tele;
+          this.readers.email=res.data.obj.email;
+          this.readers.isLogin=true;
+          this.$store.commit('login',this.readers)
+        }).catch(err=>{
+          console.log(err);
+        })
+      }
+    },
 }
 </script>
 

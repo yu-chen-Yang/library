@@ -1,14 +1,17 @@
 <template>
 <div class="card">
-  <div>姓名:</div> <p>yyc</p>
-  <div>邮箱</div> <p>yangyuchencn816@gmail.com</p>
-  <div>已借阅</div> <p>5/10</p>
+  <div>读者号: </div> <p>{{id}}</p>
 </div>
 </template>
 
 <script>
 export default {
-  name: "readerCard"
+  name: "readerCard",
+  computed:{
+    id(){
+      return this.$store.getters.id;
+    }
+  }
 }
 </script>
 

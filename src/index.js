@@ -9,6 +9,7 @@ import readerManage from "@/components/readerManage";
 import searchBook from "./components/searchBook";
 import bookManage from "./components/bookManage";
 
+
 Vue.use(VueRouter)
 
 const router=new VueRouter({

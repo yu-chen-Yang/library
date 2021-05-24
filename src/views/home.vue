@@ -14,7 +14,7 @@
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab :to="{ name:'borrowBook', query:{  usrId:id, isLogin:readerLogin } }" label="借书一览" />
+        <q-route-tab :to="{ name:'borrowBook', query:{  usrId:id, isLogin:this.isLogin } }" label="借书一览" />
         <q-route-tab to="/home/Booking" label="预约状态" />
         <q-route-tab to="/home/searchBook" label="查询书目" />
         <q-route-tab to="/home/readerManage" label="读者信息管理" />
@@ -23,11 +23,11 @@
     </q-header>
 
     <q-drawer show-if-above v-model="right" side="right" bordered>
-      <div v-if="readerLogin">
-        <reader-card />
+      <div v-if="this.isLogin">
+        <reader-card/>
       </div>
       <div v-else>
-      <reader-login v-bind:is-login="readerLogin" v-bind::reader-id.sync="id"/>
+      <reader-login/>
       </div>
     </q-drawer>
     <q-page-container>
@@ -37,18 +37,24 @@
 </template>
 
 <script>
+
 import ReaderCard from "../components/readerCard";
 import ReaderLogin from "../components/readerLogin";
+
 export default {
   name: "home",
   components: {ReaderLogin, ReaderCard},
   data(){
     return{
-      readerLogin:false,
       test:"测试",
-      id:"123"
     }
   },
+  computed:{
+    isLogin:function (){
+      console.log(this.$store.getters.isLogin)
+      return this.$store.getters.isLogin;
+    }
+  }
 }
 </script>
 

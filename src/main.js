@@ -5,10 +5,12 @@ import './quasar'
 Vue.config.productionTip = false
 import axios from 'axios'
 Vue.prototype.$axios=axios
+import store from './store'
 
 
 
 new Vue({
+  store,
   router,
   render: h => h(App),
 }).$mount('#app')
