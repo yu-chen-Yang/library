@@ -54,8 +54,8 @@ export default {
   },
   methods:{
       login:function (){
-        this.$axios.post('http://192.168.137.1:8099/readerlogin',{
-          id:this.readerId
+        this.$axios.post('http://127.0.0.1:8099/readerlogin',{
+          id:this.readerId,
         }).then(res=>{
           this.readers.name=res.data.obj.name;
           this.readers.id=this.readerId;

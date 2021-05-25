@@ -1,6 +1,10 @@
 <template>
 <div class="card">
   <div>读者号: </div> <p>{{id}}</p>
+  <div>姓名：</div> <p>{{name}}</p>
+  <div>邮箱： </div> <p>{{email}}</p>
+  <div>电话：</div> <p>{{tele}}</p>
+  <q-btn label="登出" @click="logout" color="blue" />
 </div>
 </template>
 
@@ -10,6 +14,20 @@ export default {
   computed:{
     id(){
       return this.$store.getters.id;
+    },
+    email(){
+      return this.$store.getters.email;
+    },
+    tele(){
+      return this.$store.getters.tele;
+    },
+    name(){
+      return this.$store.getters.name;
+    }
+  },
+  methods:{
+    logout:function (){
+      this.$store.commit("logout")
     }
   }
 }
