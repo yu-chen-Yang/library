@@ -4,7 +4,7 @@
   <div>姓名：</div> <p>{{name}}</p>
   <div>邮箱： </div> <p>{{email}}</p>
   <div>电话：</div> <p>{{tele}}</p>
-  <q-btn label="登出" @click="logout" color="blue" />
+  <q-btn label="登出" @click="logout" color="primary" />
 </div>
 </template>
 

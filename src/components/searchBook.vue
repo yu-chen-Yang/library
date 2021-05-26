@@ -22,10 +22,10 @@
         <div class="col">
         <div class="row" style="margin-bottom: 7rem"><div style="font-size: 1rem">剩余库存： &nbsp;</div><div :style="{color:getcolor(0)}" style="font-size: 1rem" >2</div></div>
         <div v-if="true">
-          <q-btn label="借书" color="primary" class="row" icon-right="add"/>
+          <q-btn label="借书" color="primary" class="row" icon-right="add" @click="borrow(item.isbn)"/>
         </div>
           <div v-else>
-            <q-btn label="预约" color="secondary" class="row" icon-right="history" style="font-size: 1rem"/>
+            <q-btn label="预约" color="secondary" class="row" icon-right="history" style="font-size: 1rem" @click="booking"/>
           </div>
         </div>
         </div>
@@ -40,6 +40,21 @@
         boundary-numbers
     />
   </div>
+    <q-dialog v-model="alert" >
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Alert</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          {{alertContent}}
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="OK" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -49,10 +64,12 @@ export default {
   data(){
     return{
       current:1,
-      maxPage:10,
+      maxPage:1,
       items:[],
       src:require("@/assets/封面.jpeg"),
-      text:""
+      text:"",
+      alert:false,
+      alertContent:"error"
     }
   },
   mounted:{
@@ -70,6 +87,7 @@ export default {
   },
   methods:{
     getitems:function (){
+      this.items=[];
       this.$axios.post('http://127.0.0.1:8099/booksearch',{
         id:this.text
       }).then(res=>{
@@ -86,11 +104,18 @@ export default {
       else
         return "green";
     },
-    ava:function (param){
-      if(param!=0)
-        return "目前可借";
-      else
-        return "暂不可借";
+    borrow:function (isbn){
+      if(this.checked()){
+        this.$store.commit("setBook",isbn);
+      }
+    },
+    checked:function (){
+      if(!this.$store.getters.isLogin){
+        this.alert=true;
+        this.alertContent="未登陆,请先登录!";
+        return false;
+      }
+      return true;
     }
   }
 }
