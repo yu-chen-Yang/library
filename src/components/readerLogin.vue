@@ -11,24 +11,8 @@
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
-      <q-dialog v-model="prompt" persistent>
-        <q-card style="min-width: 350px">
-          <q-card-section>
-            <div class="text-h6">邮箱找回</div>
-          </q-card-section>
-          <q-card-section class="q-pt-none">
-            <q-input dense v-model="address" autofocus @keyup.enter="prompt = false" />
-          </q-card-section>
-
-          <q-card-actions align="right" class="text-primary">
-            <q-btn flat label="Cancel" v-close-popup />
-            <q-btn flat label="Send E-mail" v-close-popup />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
       <div>
         <q-btn label="Submit" type="submit" color="primary" v-on:click="login"/>
-        <q-btn label="Forget？" color="primary" flat class="q-ml-sm" @click="forget"/>
       </div>
     </q-form>
   </div>
@@ -47,7 +31,8 @@ export default {
        id:"",
        email:"",
        tele:"",
-       isLogin:false
+       isLogin:false,
+       address:"",
      },
      readerId:""
    }
@@ -63,6 +48,7 @@ export default {
           this.readers.email=res.data.obj.email;
           this.readers.isLogin=true;
           this.$store.commit('login',this.readers)
+          this.$router.push({name:'borrowBook'})
         }).catch(err=>{
           console.log(err);
         })

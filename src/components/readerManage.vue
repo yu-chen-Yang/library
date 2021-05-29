@@ -1,16 +1,16 @@
 <template>
 <div class="readerManage">
   <div class="header q-pa-md">
-    <q-btn class="q-gutter" rounded style="margin-left: 2rem" color="secondary" @click="add=true" label="增"/>
-    <q-btn class="q-gutter" rounded style="margin-left: 2rem" color="primary" label="改"/>
-    <q-btn class="q-gutter" rounded style="margin-left: 2rem" color="red" label="删"/>
+    <q-btn class="q-gutter" rounded style="margin-left: 2rem" color="secondary" @click="dialog=true" label="增"/>
+    <q-btn class="q-gutter" rounded style="margin-left: 2rem" color="primary" @click="changeinfo" label="改"/>
+    <q-btn class="q-gutter" rounded style="margin-left: 2rem" color="red" @click="deletereader" label="删"/>
   </div>
   <q-table
       ref="myTable"
       :class="tableClass"
       tabindex="0"
       title="读者列表"
-      :data="data"
+      :data="data2"
       :columns="columns"
       row-key="id"
       selection="single"
@@ -30,7 +30,7 @@
     </template>
   </q-table>
   <q-dialog
-      v-model="add"
+      v-model="dialog"
       medium
   >
     <q-card>
@@ -45,7 +45,7 @@
       </q-card-section>
 
       <q-card-actions align="right" class="bg-white text-teal">
-        <q-btn flat label="提交" v-close-popup />
+        <q-btn flat label="提交" @click="ok" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -60,7 +60,8 @@ export default {
       navigationActive: false,
       filter: '',
       selected: [],
-      add:false,
+      dialog:false,
+      addId:"",
       addname:"",
       addtele:"",
       addemail:"",
@@ -79,21 +80,148 @@ export default {
         { name: 'tele', label: '电话', field: 'tele', sortable: false },
         { name: 'email', label: '邮箱', field: 'email' },
       ],
-      data: [
-        {id:"18120215",name:"杨宇辰",tele:"18930070816",email:"yangyuchen816@gmail.com"}
-          ]
+      data: []
     }
   },
 
   computed: {
     tableClass () {
       return this.navigationActive === true ? 'shadow-8 no-outline' : void 0
+    },
+    data2(){
+      return this.data;
     }
   },
   mounted() {
-    this.$axios.post("http:localhost:8099/")
+    console.log("mounted")
+    this.getItem();
   },
   methods: {
+    changeinfo:function (){
+      console.log(this.selected);
+      if(this.selected[0]==null){
+        alert("请选择一个用户");
+      }
+      this.addId=this.selected[0].id;
+      this.addname=this.selected[0].name;
+      this.addtele=this.selected[0].tele;
+      this.addemail=this.selected[0].email;
+      this.dialog=true;
+    },
+    clear:function (){
+      this.addId="";
+      this.addname="";
+      this.addtele="";
+      this.addemail="";
+      this.dialog=false;
+    },
+    ok:function (){
+      console.log("ok")
+      this.dialog=false;
+      if(this.selected[0]!=null){
+        if(this.selected[0].id===this.addId){
+          this.$axios.post("http://127.0.0.1:8099/readerupdate",{
+            id:this.addId,
+            name:this.addname,
+            tele:this.addtele,
+            email:this.addemail,
+          }).then(res=>{
+            console.log(res);
+            this.dialog=false;
+            if(res.data.code===200){
+              this.dialog=false;
+              this.clear();
+              this.getItem();
+              alert("修改成功");
+            }
+            else{
+              alert(res.data.message);
+            }
+          }).catch(err=>{
+            console.log(err);
+            this.dialog=false;
+            alert("修改失败,"+err);
+          })
+        }
+        else{
+          this.$axios.post("http://127.0.0.1:8099/readerinsert",{
+            id:this.addId,
+            name:this.addname,
+            tele:this.addtele,
+            email:this.addemail,
+          }).then(res=>{
+            console.log(res);
+            this.dialog=false;
+            this.clear();
+            this.getItem();
+            location.reload();
+            alert("注册成功");
+          }).catch(err=>{
+            console.log(err);
+            this.dialog=false;
+            this.clear();
+            this.getItem();
+            alert("注册失败,"+err);
+          })
+        }
+
+      }
+      else{
+        this.$axios.post("http://127.0.0.1:8099/readerinsert",{
+          id:this.addId,
+          name:this.addname,
+          tele:this.addtele,
+          email:this.addemail,
+        }).then(res=>{
+          console.log(res);
+          this.dialog=false;
+          this.clear();
+          this.getItem();
+          location.reload();
+          alert("注册成功");
+        }).catch(err=>{
+          console.log(err);
+          this.dialog=false;
+          this.clear();
+          this.getItem();
+          location.reload();
+          alert("注册失败,"+err);
+        })
+      }
+    },
+    deletereader:function (){
+      this.changeinfo();
+      this.$axios.post("http://127.0.0.1:8099/readerdelete",{
+        id:this.selected[0].id,
+      }).then(res=>{
+        this.getItem();
+        location.reload();
+        console.log(this.addId);
+        console.log(res.data.code)
+        if(res.data.code===500){
+          alert(res.data.message);
+        }
+        else{
+          alert("小fw已被删除！");
+        }
+
+      }).catch(err=>{
+        this.getItem();
+        location.reload();
+        alert("失败"+err);
+      })
+      this.clear();
+    },
+    getItem:function (){
+      console.log("start");
+      this.$axios.post("http://127.0.0.1:8099/readerselect",{}).then(res=>{
+        console.log(res);
+        this.data=res.data.obj;
+      }).catch(err=>{
+        console.log(err);
+        alert(err);
+      })
+    },
     log:function (){
       console.log(this.selected);
     },

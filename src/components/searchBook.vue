@@ -20,26 +20,17 @@
       <p style="margin-bottom: 0.1rem">Publication Dates: &nbsp;{{item.publishdate}}</p>
       </div>
         <div class="col">
-        <div class="row" style="margin-bottom: 7rem"><div style="font-size: 1rem">剩余库存： &nbsp;</div><div :style="{color:getcolor(0)}" style="font-size: 1rem" >2</div></div>
-        <div v-if="true">
-          <q-btn label="借书" color="primary" class="row" icon-right="add" @click="borrow(item.isbn)"/>
+        <div class="row" style="margin-bottom: 7rem"><div style="font-size: 1rem">剩余库存： &nbsp;</div><div :style="{color:getcolor(item.kejie)}" style="font-size: 1rem" >{{item.kejie}}</div></div>
+        <div v-if="item.kejie>0">
+          <q-btn label="借书" color="primary" class="row" icon-right="add" style="font-size: 1rem" @click="borrow(item.isbn)"/>
         </div>
           <div v-else>
-            <q-btn label="预约" color="secondary" class="row" icon-right="history" style="font-size: 1rem" @click="booking"/>
+            <q-btn label="预约" color="secondary" class="row" icon-right="history" style="font-size: 1rem" @click="order(item.isbn)"/>
           </div>
         </div>
         </div>
     </q-card-section>
   </q-card>
-  <div class="q-pa-lg flex flex-center">
-    <q-pagination
-        v-model="current"
-        color="blue"
-        :max="maxPage"
-        :max-pages="6"
-        boundary-numbers
-    />
-  </div>
     <q-dialog v-model="alert" >
       <q-card>
         <q-card-section>
@@ -107,6 +98,23 @@ export default {
     borrow:function (isbn){
       if(this.checked()){
         this.$store.commit("setBook",isbn);
+      }
+    },
+    order:function (isbn){
+      if(this.checked()){
+        this.$axios.post("http://127.0.0.1:8099/orderinsert",{
+          isbn:isbn,
+          rid:this.$store.getters.id
+        }).then(res=>{
+          console.log(res);
+          if(res.data.code===200){
+            alert("预约成功咯！");
+          }else {
+            alert(res)
+          }
+        }).catch(err=>{
+          alert(err);
+        })
       }
     },
     checked:function (){

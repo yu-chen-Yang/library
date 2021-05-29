@@ -22,7 +22,7 @@
       </q-tabs>
     </q-header>
 
-    <q-drawer show-if-above v-model="right" side="right" bordered>
+    <q-drawer show-if-above  side="right" bordered>
       <div v-if="this.$store.getters.isLogin">
         <reader-card/>
       </div>
