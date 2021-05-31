@@ -4,7 +4,7 @@
         <div class="borrowBook">
           <div class="header q-pa-md">
             <q-btn class="q-gutter" rounded style="margin-left: 2rem" color="secondary" @click="borrowbook" label="办理借书"/>
-            <q-btn class="q-gutter" rounded style="margin-left: 2rem" color="red" label="取消预约"/>
+            <q-btn class="q-gutter" rounded style="margin-left: 2rem" color="red" @click="cancelborrow" label="取消预约"/>
           </div>
           <q-table
               ref="myTable"
@@ -13,8 +13,8 @@
               title="借阅情况"
               :data="data"
               :columns="columns"
-              row-key="id"
-              selection="multiple"
+              row-key="orderdate"
+              selection="single"
               :selected.sync="selected"
               :pagination.sync="pagination"
               :filter="filter"
@@ -65,19 +65,17 @@ export default {
       pagination: {},
       content:"",
       columns: [
-        {
-          name: 'id',
-          required: true,
-          label: '书号',
-          align: 'left',
-          field: row => row.id,
-          format: val => `${val}`,
-          sortable: true
-        },
         { name: 'bname', align: 'center', label: '书名', field: 'bname', sortable: true },
         { name: 'author', label: '作者', field: 'author', sortable: false },
         { name: 'isbn', label: 'isbn', field: 'isbn' },
-        { name: 'orderdate', label: '预约时间', field: 'orderdate', sortable: true },
+        {
+          name: 'orderdate',
+          required: true,
+          label: '预约日期',
+          field: row => row.orderdate,
+          format: val => `${val}`,
+          sortable: true
+        },
         { name: 'deadline', label: '截止时间', field: 'deadline', sortable: true }
       ],
       data: []
@@ -93,11 +91,43 @@ export default {
   },
   methods: {
     borrowbook:function (){
-      this.returndialog=true;
-      this.content="还书成功";
+      this.$axios.post("http://127.0.0.1:8099/borrowwithorder",{
+        bid:this.selected[0].bid,
+        rid:this.$store.getters.id,
+        isbn:this.selected[0].isbn,
+        date:this.selected[0].orderdate,
+      }).then(res=>{
+        console.log(res);
+        if(res.data.code===200){
+          alert("成功借阅");
+        }
+        else{
+          alert(res.data.message);
+        }
+      }).catch(err=>{
+        alert(err);
+      })
+      this.selected=[];
     },
     cancelborrow:function(){
-
+      this.$axios.post("http://127.0.0.1:8099/ordercancel",{
+        rid:this.$store.getters.id,
+        isbn:this.selected[0].isbn,
+        date:this.selected[0].orderdate,
+      }).then(res=>{
+        this.getItem();
+        console.log(res);
+        location.reload();
+        if(res.data.code===200){
+          alert("取消成功");
+        }
+        else{
+          alert(res.data.message);
+        }
+      }).catch(err=>{
+        alert(err);
+      })
+      this.selected=[];
     },
     getItem:function(){
       this.$axios.post("http://127.0.0.1:8099/orderselect",{
